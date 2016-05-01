@@ -1,14 +1,10 @@
-package JudgeAgent;
+package judgeAgent;
 
-import JudgeAgent.behaviours.ReceivingBehaviour;
-import JudgeAgent.behaviours.StartBehaviour;
+import judgeAgent.behaviours.ReceivingBehaviour;
+import judgeAgent.behaviours.StartBehaviour;
 import globals.Counter;
 import globals.Timer;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.ReceiverBehaviour;
-
-import java.util.List;
 
 /**
  * Created by Jedrek on 2016-04-21.

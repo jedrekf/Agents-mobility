@@ -1,6 +1,5 @@
-package JudgeAgent.behaviours;
+package judgeAgent.behaviours;
 
-import JudgeAgent.JudgeAgent;
 import globals.Counter;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;

@@ -1,6 +1,6 @@
-package JudgeAgent.behaviours;
+package judgeAgent.behaviours;
 
-import JudgeAgent.JudgeAgent;
+import judgeAgent.JudgeAgent;
 import globals.Counter;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
