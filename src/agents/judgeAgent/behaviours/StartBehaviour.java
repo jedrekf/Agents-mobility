@@ -1,4 +1,4 @@
-package judgeAgent.behaviours;
+package agents.judgeAgent.behaviours;
 
 import globals.Counter;
 import jade.core.AID;
@@ -12,9 +12,9 @@ public class StartBehaviour extends OneShotBehaviour {
 
     @Override
     public void action() {
-        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         for (int i=0; i< Counter.getTeam_count(); i++) {
-            msg.addReceiver(new AID("runner" + i, AID.ISLOCALNAME));
+            msg.addReceiver(new AID("agent" + i + '1', AID.ISLOCALNAME)); //agent"#team_no""comp._no"
         }
         msg.setContent("start");
         myAgent.send(msg);

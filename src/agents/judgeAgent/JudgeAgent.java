@@ -1,7 +1,7 @@
-package judgeAgent;
+package agents.judgeAgent;
 
-import judgeAgent.behaviours.ReceivingBehaviour;
-import judgeAgent.behaviours.StartBehaviour;
+import agents.judgeAgent.behaviours.ReceivingBehaviour;
+import agents.judgeAgent.behaviours.StartBehaviour;
 import globals.Counter;
 import globals.Timer;
 import jade.core.Agent;
@@ -15,8 +15,10 @@ public class JudgeAgent extends Agent{
 
     @Override
     protected void setup() {
+        System.out.println("launch");
         addBehaviour(new StartBehaviour());
-        timer.start();
+        //timer.start();
+        System.out.println("timer start");
 
         addBehaviour(new ReceivingBehaviour());
     }

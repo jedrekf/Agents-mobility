@@ -1,8 +1,7 @@
-package runnerAgent;
+package agents.runnerAgent;
 
 import jade.core.Agent;
-import runnerAgent.behaviours.RunnerBehaviour;
-import runnerAgent.behaviours.LocalBehaviour;
+import agents.runnerAgent.behaviours.LocalBehaviour;
 
 
 /**
