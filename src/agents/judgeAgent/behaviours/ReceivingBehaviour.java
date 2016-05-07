@@ -28,7 +28,7 @@ public class ReceivingBehaviour extends CyclicBehaviour {
             */
             System.out.println("run finished");
         }else{
-            block();
+           // block();
         }
     }
 }

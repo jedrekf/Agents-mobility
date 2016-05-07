@@ -1,5 +1,7 @@
 package agents.runnerAgent.behaviours;
 
+import agents.runnerAgent.RunnerAgent;
+import globals.Counter;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.OntologyException;
@@ -25,6 +27,7 @@ import java.util.Iterator;
 public class RunnerBehaviour extends OneShotBehaviour{
 
     AID nextAgent;
+    int lap_counter;
 
     /**
      * Returns the name of the next agent (if no. comps <= 9 and no. teams <= 9)
@@ -33,7 +36,22 @@ public class RunnerBehaviour extends OneShotBehaviour{
         String name = myAgent.getLocalName();
         Integer teamno = Integer.parseInt(name.substring(name.length()-2, name.length()-1));
         Integer compno = Integer.parseInt(name.substring(name.length()-1, name.length()));
-        name = name.substring(0, name.length()-2) + teamno.toString() + (++compno).toString();
+        compno++;
+        if(compno == Counter.getMachine_count()+1){ //means that the full path was covered has to loop now
+            System.out.println("First lap of team: "+teamno);
+            compno = 0;
+            lap_counter = RunnerAgent.lap_counter++;
+            if(lap_counter >= Counter.getLaps()){ //if all the laps were done stop and send stop message to judge
+                ACLMessage msgTeamFinished = new ACLMessage(ACLMessage.CANCEL);
+                msgTeamFinished.setContent(teamno.toString());
+                msgTeamFinished.addReceiver(new AID("judge", AID.ISLOCALNAME));
+                myAgent.send(msgTeamFinished);
+                myAgent.addBehaviour(new LocalBehaviour());
+                myAgent.removeBehaviour(this);
+            }
+        }
+
+        name = name.substring(0, name.length()-2) + teamno.toString() + compno.toString();
         System.out.println("next agent is: " + name);
         return new AID(name, AID.ISLOCALNAME); // returns the name of the next agent(next computer) belonging to the same team
     }
@@ -76,20 +94,28 @@ public class RunnerBehaviour extends OneShotBehaviour{
         }return msg;
 
     }
+
     @Override
     public void action() {
 
         nextAgent = nextAgentAID();
-        System.out.println("will attempt to move");
         myAgent.getContentManager().registerLanguage(new SLCodec(), FIPANames.ContentLanguage.FIPA_SL0);
         myAgent.getContentManager().registerOntology(MobilityOntology.getInstance());
-        System.out.println("will attempt to move now");
+        System.out.println("will attempt to move ");
+        final boolean[] notArrived = {true};
+
+        /**
+         * To move to the place of the next team member
+         */
+        /*myAgent.addBehaviour(new SimpleBehaviour() {
         //Move to where nextAgent is
-        myAgent.addBehaviour(new OneShotBehaviour(){
             int step = 0;
-            Location destination;
+            Location destination = null;
+
             @Override
-            public void action(){
+            public void action() { */
+        int step = 0;
+        Location destination = null;
                 switch (step){
                     case 0:
                         System.out.println("request to AMS send");
@@ -98,43 +124,52 @@ public class RunnerBehaviour extends OneShotBehaviour{
                         step++;
                     case 1:
                         MessageTemplate mt = MessageTemplate.MatchSender(myAgent.getAMS());
-                        ACLMessage response = myAgent.receive(mt);
-                        if (response!= null) {
-                            System.out.println("destination found");
-                            destination = parseAMSResponse(response);
-                            step++;
+
+                        while(true){
+                            ACLMessage response = myAgent.receive(mt);
+                            if (response!= null) {
+                                System.out.println("destination found");
+                                destination = parseAMSResponse(response);
+                                step++;
+                                break;
+                            }else {
+                                block();
+                            }
                         }
-                        block();
                     case 2:
                         myAgent.doMove(destination);
                         System.out.println("moving to" + destination.toString());
                         step++;
+                        ACLMessage msgIarrived = new ACLMessage(ACLMessage.INFORM);
+                        msgIarrived.addReceiver(nextAgent);
+                        myAgent.send(msgIarrived);
+
+                        ACLMessage msgresponse;
+                        while(true) {
+                            msgresponse = myAgent.receive();
+                            if(msgresponse != null){
+                                break;
+                            }
+                        }
                         break;
                 }
+        /*    }
+
+            @Override
+            public boolean done() {
+                notArrived[0] = false;
+                // TODO Auto-generated method stub
+                if (step >= 3) {
+                    return false;
+                }
+                return true;
             }
+        });*/
 
-//            public boolean done() {
-//                // TODO Auto-generated method stub
-//                if (step >= 3)
-//                    return false;
-//                return true;
-//            }
-        });
+       // while(notArrived[0]){} //delay untill simple behaviour is finished
 
-        ACLMessage msgIarrived = new ACLMessage(ACLMessage.INFORM);
-        myAgent.send(msgIarrived);
-
-        ACLMessage msgresponse;
-        while(true) {
-            msgresponse = myAgent.receive();
-            if(msgresponse != null){
-                break;
-            }
-        }
-
+        System.out.println("Agent moved");
         myAgent.addBehaviour(new LocalBehaviour());
         myAgent.removeBehaviour(this);
-
-
     }
 }

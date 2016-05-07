@@ -38,7 +38,7 @@ public class LocalBehaviour extends CyclicBehaviour{
                 myAgent.removeBehaviour(this);
             }else{
 
-                block();
+               // block();
             }
         }
 
