@@ -4,7 +4,7 @@ package globals;
  * Created by jedrek on 01.05.16.
  */
 public class Counter {
-    private static int lap_count = 1;
+    private static int lap_count = 2;
     private static int team_count = 1;
     private static int machine_count = 2;
 

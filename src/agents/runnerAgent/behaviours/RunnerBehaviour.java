@@ -27,7 +27,7 @@ import java.util.Iterator;
 public class RunnerBehaviour extends OneShotBehaviour{
 
     AID nextAgent;
-    int lap_counter;
+    int lap_counter=0;
 
     /**
      * Returns the name of the next agent (if no. comps <= 9 and no. teams <= 9)
@@ -38,16 +38,15 @@ public class RunnerBehaviour extends OneShotBehaviour{
         Integer compno = Integer.parseInt(name.substring(name.length()-1, name.length()));
         compno++;
         if(compno == Counter.getMachine_count()+1){ //means that the full path was covered has to loop now
-            System.out.println("First lap of team: "+teamno);
             compno = 0;
-            lap_counter = RunnerAgent.lap_counter++;
+            lap_counter = ++RunnerAgent.lap_counter;
+            System.out.println("lap " + lap_counter + " of team: "+teamno);
             if(lap_counter >= Counter.getLaps()){ //if all the laps were done stop and send stop message to judge
                 ACLMessage msgTeamFinished = new ACLMessage(ACLMessage.CANCEL);
                 msgTeamFinished.setContent(teamno.toString());
                 msgTeamFinished.addReceiver(new AID("judge", AID.ISLOCALNAME));
                 myAgent.send(msgTeamFinished);
-                myAgent.addBehaviour(new LocalBehaviour());
-                myAgent.removeBehaviour(this);
+                return null;
             }
         }
 
@@ -99,76 +98,52 @@ public class RunnerBehaviour extends OneShotBehaviour{
     public void action() {
 
         nextAgent = nextAgentAID();
-        myAgent.getContentManager().registerLanguage(new SLCodec(), FIPANames.ContentLanguage.FIPA_SL0);
-        myAgent.getContentManager().registerOntology(MobilityOntology.getInstance());
-        System.out.println("will attempt to move ");
-        final boolean[] notArrived = {true};
+        if(nextAgent != null) {
+            myAgent.getContentManager().registerLanguage(new SLCodec(), FIPANames.ContentLanguage.FIPA_SL0);
+            myAgent.getContentManager().registerOntology(MobilityOntology.getInstance());
+            System.out.println(myAgent.getLocalName() + " will attempt to move to " + nextAgent.getLocalName());
+            final boolean[] notArrived = {true};
 
-        /**
-         * To move to the place of the next team member
-         */
-        /*myAgent.addBehaviour(new SimpleBehaviour() {
-        //Move to where nextAgent is
             int step = 0;
             Location destination = null;
+            switch (step) {
+                case 0:
+                    ACLMessage request = prepareRequestToAMS(nextAgent);
+                    myAgent.send(request);
+                    step++;
+                case 1:
+                    MessageTemplate mt = MessageTemplate.MatchSender(myAgent.getAMS());
 
-            @Override
-            public void action() { */
-        int step = 0;
-        Location destination = null;
-                switch (step){
-                    case 0:
-                        System.out.println("request to AMS send");
-                        ACLMessage request = prepareRequestToAMS(nextAgent);
-                        myAgent.send(request);
-                        step++;
-                    case 1:
-                        MessageTemplate mt = MessageTemplate.MatchSender(myAgent.getAMS());
-
-                        while(true){
-                            ACLMessage response = myAgent.receive(mt);
-                            if (response!= null) {
-                                System.out.println("destination found");
-                                destination = parseAMSResponse(response);
-                                step++;
-                                break;
-                            }else {
-                                block();
-                            }
+                    while (true) {
+                        ACLMessage response = myAgent.receive(mt);
+                        if (response != null) {
+                            destination = parseAMSResponse(response);
+                            step++;
+                            break;
+                        } else {
+                            block();
                         }
-                    case 2:
-                        myAgent.doMove(destination);
-                        System.out.println("moving to" + destination.toString());
-                        step++;
-                        ACLMessage msgIarrived = new ACLMessage(ACLMessage.INFORM);
-                        msgIarrived.addReceiver(nextAgent);
-                        myAgent.send(msgIarrived);
+                    }
+                case 2:
+                    myAgent.doMove(destination);
+                    System.out.println("moving to " + destination.getName() + "and sending arrived message");
+                    step++;
+                    ACLMessage msgIarrived = new ACLMessage(ACLMessage.INFORM);
+                    msgIarrived.addReceiver(nextAgent);
+                    myAgent.send(msgIarrived);
 
-                        ACLMessage msgresponse;
-                        while(true) {
-                            msgresponse = myAgent.receive();
-                            if(msgresponse != null){
-                                break;
-                            }
+                    ACLMessage msgresponse;
+                    while (true) {
+                        msgresponse = myAgent.receive();
+                        if (msgresponse != null) {
+                            break;
                         }
-                        break;
-                }
-        /*    }
-
-            @Override
-            public boolean done() {
-                notArrived[0] = false;
-                // TODO Auto-generated method stub
-                if (step >= 3) {
-                    return false;
-                }
-                return true;
+                    }
+                    break;
             }
-        });*/
 
-       // while(notArrived[0]){} //delay untill simple behaviour is finished
-
-        System.out.println("Agent moved");
+            System.out.println("Agent " + myAgent.getLocalName() + " moved");
+        }
         myAgent.addBehaviour(new LocalBehaviour());
         myAgent.removeBehaviour(this);
     }

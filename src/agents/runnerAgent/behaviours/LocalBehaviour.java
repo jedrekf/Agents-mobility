@@ -33,7 +33,8 @@ public class LocalBehaviour extends CyclicBehaviour{
                 ACLMessage replymsg = msgFromRunner.createReply();
                 replymsg.setPerformative(ACLMessage.CONFIRM);
                 myAgent.send(replymsg);
-                System.out.println("received message from runner, confirming and starting to run");
+                System.out.println(myAgent.getLocalName() + "received message from runner "+
+                        msgFromRunner.getSender().getLocalName() + " , confirming and starting to run");
                 myAgent.addBehaviour(new RunnerBehaviour());
                 myAgent.removeBehaviour(this);
             }else{
