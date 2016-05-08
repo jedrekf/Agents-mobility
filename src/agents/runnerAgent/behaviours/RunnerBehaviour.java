@@ -29,6 +29,10 @@ public class RunnerBehaviour extends OneShotBehaviour{
     AID nextAgent;
     int lap_counter=0;
 
+    /*
+    * Czy to nie jest tak że dla danego agenta następny agent jest zawsze taki sam? jeżeli tak to po co za każdym razem to liczyć
+    * Czy zawsze trzeba liczyć te teamy?
+    * */
     /**
      * Returns the name of the next agent (if no. comps <= 9 and no. teams <= 9)
      */
@@ -94,6 +98,12 @@ public class RunnerBehaviour extends OneShotBehaviour{
 
     }
 
+    /*My comments
+    -po co te stepy i switch bez breaków
+    -po co czekanie na widomość w case: 2 skoro jak dostaniemy wiadomość dojdzie to wychodzimy a jak dostanie dziwną widomość to też
+    -dlaczego nie wkładamy agenta do behaviour w konstruktorze? czy to nie powoduje problemów (dotyczy wszystkich zachowań)
+
+    */
     @Override
     public void action() {
 

@@ -13,7 +13,10 @@ import jade.lang.acl.MessageTemplate;
  */
 public class LocalBehaviour extends CyclicBehaviour{
 
-
+/*
+    nie wiem czy te templaty tak działają
+    czasami dajesz block(); czasami nie
+ */
     @Override
     public void action() {
         MessageTemplate msgStartTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);

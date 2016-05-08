@@ -11,6 +11,9 @@ import jade.lang.acl.MessageTemplate;
  */
 public class ReceivingBehaviour extends CyclicBehaviour {
     int team_count = 0;
+    /*
+    Sam nie wiem ja bym powkładał wszystkie te wiadomości w klasy i miałbym w nosie te stringi :P
+     */
     @Override
     public void action() {
 

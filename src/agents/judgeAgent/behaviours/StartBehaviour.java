@@ -11,6 +11,9 @@ import jade.lang.acl.ACLMessage;
  */
 public class StartBehaviour extends OneShotBehaviour {
 
+    /*
+    Jak dajemy więcej niż 9 teamów to wtedy #teamno ma 2 cyfry
+     */
     @Override
     public void action() {
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
