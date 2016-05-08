@@ -21,7 +21,7 @@ public class ReceivingBehaviour extends CyclicBehaviour {
             int group_number = Integer.parseInt(msg.getContent()); //receives the "#group number"
 
             JudgeAgent.team_times[group_number] = JudgeAgent.timer.getElapsedTime();
-            System.out.println("team" + group_number + " finished!");
+            System.out.println("team" + group_number + " finished! \n after the time of: " + JudgeAgent.team_times[group_number]);
             team_count++;
             if (team_count == Counter.getTeam_count());
                 JudgeAgent.timer.stop();
