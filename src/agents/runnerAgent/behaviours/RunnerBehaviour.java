@@ -44,7 +44,7 @@ public class RunnerBehaviour extends OneShotBehaviour{
         if(compno == Counter.getMachine_count()+1){ //means that the full path was covered has to loop now
             compno = 0;
             lap_counter = ++RunnerAgent.lap_counter;
-            System.out.println("lap " + lap_counter + " of team: "+teamno);
+            //System.out.println("lap " + lap_counter + " of team: "+teamno);
             if(lap_counter >= Counter.getLaps()){ //if all the laps were done stop and send stop message to judge
                 ACLMessage msgTeamFinished = new ACLMessage(ACLMessage.CANCEL);
                 msgTeamFinished.setContent(teamno.toString());
@@ -55,7 +55,7 @@ public class RunnerBehaviour extends OneShotBehaviour{
         }
 
         name = name.substring(0, name.length()-2) + teamno.toString() + compno.toString();
-        System.out.println("next agent is: " + name);
+       // System.out.println("next agent is: " + name);
         return new AID(name, AID.ISLOCALNAME); // returns the name of the next agent(next computer) belonging to the same team
     }
 
@@ -111,7 +111,7 @@ public class RunnerBehaviour extends OneShotBehaviour{
         if(nextAgent != null) {
             myAgent.getContentManager().registerLanguage(new SLCodec(), FIPANames.ContentLanguage.FIPA_SL0);
             myAgent.getContentManager().registerOntology(MobilityOntology.getInstance());
-            System.out.println(myAgent.getLocalName() + " will attempt to move to " + nextAgent.getLocalName());
+           // System.out.println(myAgent.getLocalName() + " will attempt to move to " + nextAgent.getLocalName());
             final boolean[] notArrived = {true};
 
             int step = 0;
@@ -136,7 +136,7 @@ public class RunnerBehaviour extends OneShotBehaviour{
                     }
                 case 2:
                     myAgent.doMove(destination);
-                    System.out.println("moving to " + destination.getName() + "and sending arrived message");
+                    //System.out.println("moving to " + destination.getName() + "and sending arrived message");
                     step++;
                     ACLMessage msgIarrived = new ACLMessage(ACLMessage.INFORM);
                     msgIarrived.addReceiver(nextAgent);
@@ -152,7 +152,7 @@ public class RunnerBehaviour extends OneShotBehaviour{
                     break;
             }
 
-            System.out.println("Agent " + myAgent.getLocalName() + " moved");
+            //System.out.println("Agent " + myAgent.getLocalName() + " moved");
         }
         myAgent.addBehaviour(new LocalBehaviour());
         myAgent.removeBehaviour(this);
