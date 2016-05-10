@@ -18,7 +18,7 @@ public class StartBehaviour extends OneShotBehaviour {
     public void action() {
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         for (int i=0; i< Counter.getTeam_count(); i++) {
-            msg.addReceiver(new AID("agent" + i + '1', AID.ISLOCALNAME)); //agent"#team_no""comp._no"
+            msg.addReceiver(new AID("agent" + String.format("%02d",i)  + '1', AID.ISLOCALNAME)); //agent"#team_no""comp._no"
         }
         msg.setContent("start");
         JudgeAgent.timer.start();

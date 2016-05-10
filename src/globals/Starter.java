@@ -2,6 +2,7 @@ package globals;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
+import jade.lang.acl.StringACLCodec;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -39,10 +40,10 @@ public class Starter
             try {
                 for (int j = 0; j<numOfTeams; j++){
                     if (i==1) { //create additional agent on the first container
-                        runnerAgent = currContainer.createNewAgent("agent" + j + "0", "agents.runnerAgent.RunnerAgent", null);
+                        runnerAgent = currContainer.createNewAgent("agent" + String.format("%02d",j) + "0", "agents.runnerAgent.RunnerAgent", null);
                         runnerAgent.start();
                     }
-                    runnerAgent = currContainer.createNewAgent("agent"+j+""+i, "agents.runnerAgent.RunnerAgent", null);
+                    runnerAgent = currContainer.createNewAgent("agent"+String.format("%02d",j) +""+i, "agents.runnerAgent.RunnerAgent", null);
                     runnerAgent.start();
                 }
             } catch (StaleProxyException e) {
@@ -62,6 +63,6 @@ public class Starter
     }
 
     public static void main(String[] args) {
-        Start(4,4,4);
+        Start(12,4,4);
     }
 }

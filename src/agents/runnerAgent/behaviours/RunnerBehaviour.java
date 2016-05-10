@@ -38,7 +38,10 @@ public class RunnerBehaviour extends OneShotBehaviour{
      */
     private AID nextAgentAID(){
         String name = myAgent.getLocalName();
-        Integer teamno = Integer.parseInt(name.substring(name.length()-2, name.length()-1));
+        int nameLength = name.length();
+        Integer teamDigit1 = Integer.parseInt(name.charAt(nameLength-3)+"");
+        Integer teamDigit2 = Integer.parseInt(name.charAt(nameLength-2)+"");
+        Integer teamno = teamDigit1*10 + teamDigit2;//Integer.parseInt(name.substring(name.length()-2, name.length()-1));
         Integer compno = Integer.parseInt(name.substring(name.length()-1, name.length()));
         compno++;
         if(compno == Counter.getMachine_count()+1){ //means that the full path was covered has to loop now
@@ -54,8 +57,8 @@ public class RunnerBehaviour extends OneShotBehaviour{
             }
         }
 
-        name = name.substring(0, name.length()-2) + teamno.toString() + compno.toString();
-       // System.out.println("next agent is: " + name);
+        name = name.substring(0, name.length()-3) + String.format("%02d",teamno) + compno.toString();
+       System.out.println("next agent is: " + name);
         return new AID(name, AID.ISLOCALNAME); // returns the name of the next agent(next computer) belonging to the same team
     }
 
