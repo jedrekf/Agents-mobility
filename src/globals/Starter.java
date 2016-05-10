@@ -34,6 +34,8 @@ public class Starter
         for (int i = 1; i <= numOfMachines; i++){
             Profile p = new ProfileImpl();
             p.setParameter("container-name", "Container"+i);
+            // p.setParameter(Profile.MAIN_HOST, "192.168.110.140");
+            // p.setParameter(Profile.MAIN_PORT, "1099");
             AgentContainer currContainer = rt.createAgentContainer(p);
             AgentController runnerAgent;
 
