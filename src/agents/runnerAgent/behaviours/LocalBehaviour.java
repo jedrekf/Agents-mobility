@@ -24,7 +24,7 @@ public class LocalBehaviour extends CyclicBehaviour{
         ACLMessage msgStart = myAgent.receive(msgStartTemplate);
         if(msgStart != null) {
             myAgent.addBehaviour(new RunnerBehaviour());
-            System.out.println("started the run");
+            //System.out.println("started the run");
             myAgent.removeBehaviour(this);
         }else{
 

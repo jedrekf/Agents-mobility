@@ -65,6 +65,6 @@ public class Starter
     }
 
     public static void main(String[] args) {
-        Start(12,4,4);
+        Start(20, 2, 6);
     }
 }

@@ -58,7 +58,7 @@ public class RunnerBehaviour extends OneShotBehaviour{
         }
 
         name = name.substring(0, name.length()-3) + String.format("%02d",teamno) + compno.toString();
-       System.out.println("next agent is: " + name);
+       //System.out.println("next agent is: " + name);
         return new AID(name, AID.ISLOCALNAME); // returns the name of the next agent(next computer) belonging to the same team
     }
 
